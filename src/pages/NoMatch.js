@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Answer = () => {
+const NoMatch = () => {
     return (
         <div>
-            
+            error 404
         </div>
     );
 };
 
-export default Answer;
+export default NoMatch;
