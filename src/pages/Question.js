@@ -1,15 +1,46 @@
 import React from 'react';
 
-import { Button, Typography } from '@mui/material';
+import { Button, CircularProgress, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 import useAxios from '../hooks/useAxios';
 
-const Question = () => {
-    let apiUrl = `/api.php?amount=10`;
-    const { data, error, loading } = useAxios({ url: apiUrl });
+import { useSelector, useDispatch } from 'react-redux'
 
-    console.log('123', data);
+const Question = () => {
+    const { 
+        question_category, 
+        question_difficulty, 
+        question_type, 
+        amount_of_question
+    } = useSelector(state => state.quiz);
+    const dispatch = useDispatch();
+
+    console.log(question_category, question_difficulty, question_type, amount_of_question);
+
+    let apiUrl = `/api.php?amount=${amount_of_question}`;
+    
+    if(question_category) {
+        apiUrl = apiUrl.concat(`&category=${question_category}`)
+    }
+    if(question_difficulty) {
+        apiUrl = apiUrl.concat(`&difficulty=${question_difficulty}`)
+    }
+    if(question_type) {
+        apiUrl = apiUrl.concat(`&type=${question_type}`)
+    }
+
+    const { data, error, loading } = useAxios({ url: apiUrl });
+    console.log('data', data);
+
+    if(loading) {
+        return (
+            <Box mt={20}>
+                <CircularProgress></CircularProgress>
+            </Box>
+        )
+    }
+
     return (
         <Box>
             <Typography variant="h4">Question 1</Typography>

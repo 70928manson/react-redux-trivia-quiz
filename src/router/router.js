@@ -9,7 +9,7 @@ const routerConfig = [
       element: <Settings />
     },
     {
-      path: '/question',
+      path: '/questions',
       element: <Question />
     },
     {

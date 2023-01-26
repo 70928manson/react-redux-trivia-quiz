@@ -1,5 +1,6 @@
 import { CircularProgress, Typography } from '@mui/material';
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 import { Button } from '@mui/material';
 import { Box } from '@mui/system';
@@ -10,18 +11,22 @@ import useAxios from '../hooks/useAxios';
 
 const Settings = () => {
     const { data, error, loading } = useAxios({ url: "/api_category.php" });
-    console.log(data, error, loading);
+    const navigate = useNavigate();
+
     if(loading) {
         return (
-            <Box mt={"45vh"}>
-                <CircularProgress />
-            </Box>
+            <>
+                <Typography variant="h2" fontWeight="bold">Quiz App</Typography>
+                <Box mt={20}>
+                    <CircularProgress />
+                </Box>
+            </>
         )
     }
 
     if(error) {
         return (
-            <Typography variant="h6" mt={"45vh"} color="red">
+            <Typography variant="h6" mt={20} color="red">
                 Something Went Wrong!
             </Typography>
         )
@@ -40,9 +45,8 @@ const Settings = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    }
-
-    console.log('123', typeof data.trivia_categories);
+        navigate("/questions")
+    }   
 
     return (
         <div>
