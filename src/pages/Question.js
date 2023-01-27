@@ -1,25 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button, CircularProgress, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
 import useAxios from '../hooks/useAxios';
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
+import { changeScore } from '../slices/quizSlice';
+import { useNavigate } from 'react-router';
+
+const getRandomNum = (max) => {
+    return Math.floor(Math.random(  ) * Math.floor(max));
+}
 
 const Question = () => {
     const { 
         question_category, 
         question_difficulty, 
         question_type, 
-        amount_of_question
+        amount_of_question,
+        score
     } = useSelector(state => state.quiz);
     const dispatch = useDispatch();
 
-    console.log(question_category, question_difficulty, question_type, amount_of_question);
+    const navigate = useNavigate();
 
+    //組合傳給Open Trivia Database的url
     let apiUrl = `/api.php?amount=${amount_of_question}`;
-    
     if(question_category) {
         apiUrl = apiUrl.concat(`&category=${question_category}`)
     }
@@ -30,8 +37,26 @@ const Question = () => {
         apiUrl = apiUrl.concat(`&type=${question_type}`)
     }
 
-    const { data, error, loading } = useAxios({ url: apiUrl });
-    console.log('data', data);
+    const { data, loading } = useAxios({ url: apiUrl });
+    const [questionIndex, setQuestionIndex] = useState(0);
+    const [options, setOptions] = useState([]);
+
+    console.log('options' ,options);
+
+    useEffect(() => {
+        if(data?.results?.length) {
+            const question = data.results[questionIndex];
+            console.log('correct_answer', question.correct_answer);
+            let answers = [...question.incorrect_answers];
+            //在隨機位置中插入正確答案，避免答案永遠在同一個位置
+            answers.splice(
+                getRandomNum(question.incorrect_answers.length),
+                0,
+                question.correct_answer
+            );
+            setOptions(answers);
+        }
+    }, [data, questionIndex])
 
     if(loading) {
         return (
@@ -41,11 +66,32 @@ const Question = () => {
         )
     }
 
+    const handleClickAnswer = (e) => {
+        const question = data.results[questionIndex];
+        if(e.target.textContent === question.correct_answer) {
+            dispatch(changeScore(score + 1));
+            console.log('答對了');
+        }else {
+            console.log('答錯了');
+        }
+        //問題回答完後載入下一個問題，一直到所有問題答完後導航至最終分數頁面
+        if(questionIndex + 1 < data.results.length) {
+            setQuestionIndex(questionIndex + 1);
+        } else {
+            navigate("/score");
+        }
+    }
+
     return (
         <Box>
-            <Typography variant="h4">Question 1</Typography>
-            <Typography mt={5}>This is the question</Typography>
-            <Box mt={2}>
+            <Typography variant="h4">Question {questionIndex + 1}</Typography>
+            <Typography mt={5}>{data.results[questionIndex].question}</Typography>
+            {options.map((data, id) => (
+                <Box mt={2} key={id} style={{width: "30%", margin: "16px auto 0px auto"}}>
+                    <Button onClick={handleClickAnswer} variant="contained" style={{width: "100%"}}>{data}</Button>
+                </Box>
+            ))}
+            {/* <Box mt={2}>
                 <Button variant="contained">Answer 1</Button>
             </Box>
             <Box mt={2}>
@@ -56,8 +102,8 @@ const Question = () => {
             </Box>
             <Box mt={2}>
                 <Button variant="contained">Answer 4</Button>
-            </Box>
-            <Box mt={5}>Score: 2 / 6</Box>
+            </Box> */}
+            <Box mt={5}>Score: {score} / {data.results.length}</Box>
         </Box>
     );
 };

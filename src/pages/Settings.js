@@ -9,14 +9,17 @@ import SelectField from '../components/SelectField';
 import TextFieldComp from '../components/TextFieldComp';
 import useAxios from '../hooks/useAxios';
 
+import { useSelector } from 'react-redux';
+
 const Settings = () => {
+    const { amount_of_question } = useSelector(state => state.quiz);
     const { data, error, loading } = useAxios({ url: "/api_category.php" });
     const navigate = useNavigate();
 
     if(loading) {
         return (
             <>
-                <Typography variant="h2" fontWeight="bold">Quiz App</Typography>
+                <Typography variant="h2" fontWeight="bold">Manson Quiz</Typography>
                 <Box mt={20}>
                     <CircularProgress />
                 </Box>
@@ -45,12 +48,17 @@ const Settings = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate("/questions")
+        if (amount_of_question > 0) {
+            navigate("/questions");
+        }else {
+            alert("問題數量不可小於1");
+        }
+
     }   
 
     return (
         <div>
-            <Typography variant="h2" fontWeight="bold">Quiz App</Typography>
+            <Typography variant="h2" fontWeight="bold">Manson Quiz</Typography>
             <form onSubmit={handleSubmit}>
                 <SelectField options={data.trivia_categories} label="Category" />
                 <SelectField options={difficultyOptions} label="Difficulty" />
@@ -58,7 +66,7 @@ const Settings = () => {
                 <TextFieldComp />
                 <Box mt={3} width="100%">
                     <Button fullWidth variant="contained" type="submit">
-                        GetStarted
+                        Get Started
                     </Button>
                 </Box>
             </form>
