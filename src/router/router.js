@@ -5,15 +5,15 @@ import NoMatch from '../pages/NoMatch';
 
 const routerConfig = [
     {
-      path: '/',
+      path: 'react-redux-trivia-quiz/',
       element: <Settings />
     },
     {
-      path: '/questions',
+      path: 'react-redux-trivia-quiz/questions',
       element: <Question />
     },
     {
-      path: '/score',
+      path: 'react-redux-trivia-quiz/score',
       element: <FinalScreen />
     },
     { path: "*", element: <NoMatch /> }

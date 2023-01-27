@@ -77,7 +77,7 @@ const Question = () => {
         if(questionIndex + 1 < data.results.length) {
             setQuestionIndex(questionIndex + 1);
         } else {
-            navigate("/score");
+            navigate("react-redux-trivia-quiz/score");
         }
     }
 
