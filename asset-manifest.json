@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/react-redux-trivia-quiz/static/css/main.31d6cfe0.css",
-    "main.js": "/react-redux-trivia-quiz/static/js/main.f1205614.js",
+    "main.js": "/react-redux-trivia-quiz/static/js/main.31d1d946.js",
     "index.html": "/react-redux-trivia-quiz/index.html",
-    "main.f1205614.js.map": "/react-redux-trivia-quiz/static/js/main.f1205614.js.map"
+    "main.31d1d946.js.map": "/react-redux-trivia-quiz/static/js/main.31d1d946.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.f1205614.js"
+    "static/js/main.31d1d946.js"
   ]
 }
