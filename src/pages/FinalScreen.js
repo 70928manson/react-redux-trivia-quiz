@@ -14,7 +14,7 @@ const FinalScreen = () => {
     const handleBackToSettings = () => {
         dispatch(changeScore(0));
         dispatch(changeAmount(50));
-        navigate("react-redux-trivia-quiz/");
+        navigate("/react-redux-trivia-quiz");
     }
 
     return (

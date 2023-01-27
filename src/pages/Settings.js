@@ -49,7 +49,7 @@ const Settings = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (amount_of_question > 0) {
-            navigate("react-redux-trivia-quiz/questions");
+            navigate("/react-redux-trivia-quiz/questions");
         }else {
             alert("問題數量不可小於1");
         }
