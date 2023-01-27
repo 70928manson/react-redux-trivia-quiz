@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { changeScore } from '../slices/quizSlice';
 import { useNavigate } from 'react-router';
 
+import { decode } from "html-entities";
+
 const getRandomNum = (max) => {
     return Math.floor(Math.random(  ) * Math.floor(max));
 }
@@ -70,9 +72,6 @@ const Question = () => {
         const question = data.results[questionIndex];
         if(e.target.textContent === question.correct_answer) {
             dispatch(changeScore(score + 1));
-            console.log('答對了');
-        }else {
-            console.log('答錯了');
         }
         //問題回答完後載入下一個問題，一直到所有問題答完後導航至最終分數頁面
         if(questionIndex + 1 < data.results.length) {
@@ -85,24 +84,14 @@ const Question = () => {
     return (
         <Box>
             <Typography variant="h4">Question {questionIndex + 1}</Typography>
-            <Typography mt={5}>{data.results[questionIndex].question}</Typography>
+            <Typography mt={5}>{decode(data.results[questionIndex].question)}</Typography>
             {options.map((data, id) => (
                 <Box mt={2} key={id} style={{width: "30%", margin: "16px auto 0px auto"}}>
-                    <Button onClick={handleClickAnswer} variant="contained" style={{width: "100%"}}>{data}</Button>
+                    <Button onClick={handleClickAnswer} variant="contained" style={{width: "100%"}}>
+                        {decode(data)}
+                    </Button>
                 </Box>
             ))}
-            {/* <Box mt={2}>
-                <Button variant="contained">Answer 1</Button>
-            </Box>
-            <Box mt={2}>
-                <Button variant="contained">Answer 2</Button>
-            </Box>
-            <Box mt={2}>
-                <Button variant="contained">Answer 3</Button>
-            </Box>
-            <Box mt={2}>
-                <Button variant="contained">Answer 4</Button>
-            </Box> */}
             <Box mt={5}>Score: {score} / {data.results.length}</Box>
         </Box>
     );
